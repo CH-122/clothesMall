@@ -1,0 +1,68 @@
+<template lang="">
+    <div class="tab-bar-item" @click = "itemClick">
+      <div v-if="!isActive" >
+        <slot name="item-icon"></slot>
+      </div>
+      <div  v-else >
+        <slot name="item-icon-active"></slot>
+      </div>
+      <!-- <div :class="{active:isActive}"> -->
+      <div :style="activeStyle">
+        <slot name="item-text"></slot>
+      </div> 
+    </div>
+</template>
+<script>
+export default {
+  name: "TabBarItem",
+  data() {
+    return {
+      // isActive: true,
+    };
+  },
+  computed: {
+    isActive() {
+      return this.$route.path === this.path;
+    },
+    activeStyle() {
+      return this.isActive ? { color: this.activeColor } : {};
+    },
+  },
+  props: {
+    path: String,
+    activeColor: {
+      type: String,
+      default: "greenyellow",
+    },
+  },
+  methods: {
+    itemClick() {
+      // 注意要抛出连续请求一个地址的异常
+      this.$router.push(this.path).catch((err) => err);
+    },
+  },
+};
+</script>
+
+<style scoped>
+.tab-bar-item {
+  text-align: center;
+  height: 49px;
+  font-size: 14px;
+  flex: 1;
+}
+
+.tab-bar-item img {
+  width: 24px;
+  height: 24px;
+  margin-top: 3px;
+  vertical-align: middle;
+  margin-bottom: 2px;
+}
+
+.active {
+  color: chocolate;
+}
+</style> 
+
+
