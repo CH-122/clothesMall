@@ -1,11 +1,24 @@
 <template>
-  <div>
+  <div id="home">
+    <nav-bar class="home-nav">
+      <div slot="center">ClothesMall</div>
+    </nav-bar>
     <h2>首页</h2>
   </div>
 </template>
 <script>
-export default {};
+import NavBar from "../../components/common/navbar/NavBar.vue";
+export default {
+  name: "Home",
+  components: {
+    NavBar,
+  },
+};
 </script>
 
-<style lang="">
+<style>
+.home-nav {
+  background-color: rgb(211, 143, 169);
+  color: #eee;
+}
 </style>
