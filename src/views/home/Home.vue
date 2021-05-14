@@ -4,48 +4,25 @@
     <nav-bar class="home-nav">
       <div slot="center">ClothesMall</div>
     </nav-bar>
-    <!-- 轮播图 -->
-    <home-swiper :banners="banners"></home-swiper>
-    <!-- 推荐栏 -->
-    <recommend-view :recommends="recommends"></recommend-view>
-    <!-- 本周流行 -->
-    <feature-view></feature-view>
-    <!-- 标签控制 -->
-    <tab-control
-      :titles="['流行', '新款', '精选']"
-      class="tab-control clearfix"
-    ></tab-control>
-    <!-- 展示栏 -->
-    <goods-list :goods="goods['pop'].list"></goods-list>
+
+    <scroll class="content">
+      <!-- 轮播图 -->
+      <home-swiper :banners="banners"></home-swiper>
+      <!-- 推荐栏 -->
+      <recommend-view :recommends="recommends"></recommend-view>
+      <!-- 本周流行 -->
+      <feature-view></feature-view>
+      <!-- 标签控制 -->
+      <tab-control
+        :titles="['流行', '新款', '精选']"
+        class="tab-control clearfix"
+        @tabClick="tabClick"
+      ></tab-control>
+      <!-- 展示栏 -->
+      <goods-list :goods="showGoods"></goods-list>
+    </scroll>
+
     <ul>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
       <li>1</li>
       <li>1</li>
       <li>1</li>
@@ -67,6 +44,7 @@
 import NavBar from "../../components/common/navbar/NavBar.vue";
 import TabControl from "../../components/content/tabControl/TabControl.vue";
 import GoodsList from "../../components/content/goods/GoodsList.vue";
+import Scroll from "../../components/common/scroll/Scroll";
 
 import HomeSwiper from "./childComp/HomeSwiper.vue";
 import RecommendView from "./childComp/RecommendView.vue";
@@ -83,6 +61,7 @@ export default {
     FeatureView,
     TabControl,
     GoodsList,
+    Scroll,
   },
   created() {
     this.getHomeMultidata();
@@ -109,9 +88,13 @@ export default {
           list: [],
         },
       },
+      currentType: "pop",
     };
   },
   methods: {
+    /* 
+      网络请求方法
+     */
     getHomeMultidata() {
       getHomeMultidata().then((res) => {
         this.banners = res.data.banner.list;
@@ -126,12 +109,38 @@ export default {
         this.goods[type].page += 1;
       });
     },
+
+    /* 
+      事件监听方法
+    */
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.currentType = "pop";
+          break;
+        case 1:
+          this.currentType = "new";
+          break;
+        case 2:
+          this.currentType = "sell";
+          break;
+      }
+    },
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list;
+    },
+  },
+  mounted() {
+    // new BScroll("#home");
   },
 };
 </script>
 
-<style>
+<style scoped>
 .home-nav {
+  /* scoped   css只会对当前组件起效果 */
   position: fixed;
   top: 0;
   left: 0;
@@ -141,9 +150,11 @@ export default {
   color: #eee;
 }
 #home {
-  padding-top: 44px;
+  /* padding-top: 44px; */
   /* padding-bottom: 1000px; */
   background-color: #eee;
+  /* vh视口高度 */
+  height: 100vh;
 }
 
 .tab-control {
@@ -151,5 +162,10 @@ export default {
   top: 44px;
   /* 解决goodlist覆盖tabControl */
   z-index: 99;
+}
+
+.content {
+  height: calc(100vh - 93px);
+  /* overflow: hidden; */
 }
 </style>
