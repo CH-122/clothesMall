@@ -8,7 +8,7 @@
       :titles="['流行', '新款', '精选']"
       class="tab-control"
       @tabClick="tabClick"
-      ref="tabControl"
+      ref="tabControl1"
       v-show="isTabFixed"
     ></tab-control>
     <scroll
@@ -29,7 +29,7 @@
       <tab-control
         :titles="['流行', '新款', '精选']"
         @tabClick="tabClick"
-        ref="tabControl"
+        ref="tabControl2"
         v-show="isShow"
       ></tab-control>
       <!-- 展示栏 -->
@@ -89,8 +89,8 @@ export default {
 
     // 组件属性$el，用于获取组件中的元素
     setTimeout(() => {
-      console.log(this.$refs.tabControl.$el.offsetTop);
-      this.taboffsetTop = this.$refs.tabControl.$el.offsetTop;
+      console.log(this.$refs.tabControl2.$el.offsetTop);
+      this.taboffsetTop = this.$refs.tabControl2.$el.offsetTop;
     }, 100);
   },
   data() {
@@ -155,6 +155,8 @@ export default {
           this.currentType = "sell";
           break;
       }
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
     },
     backClick() {
       console.log("backtop");
@@ -178,6 +180,9 @@ export default {
     showGoods() {
       return this.goods[this.currentType].list;
     },
+  },
+  destroyed() {
+    console.log("home destoryed");
   },
 };
 </script>

@@ -30,8 +30,8 @@ export default {
       probeType: this.probeType,
       pullUpLoad: this.pullUpLoad,
       click: true,
-      // observeDOM: true,
-      // observeImage: true,
+      observeDOM: true,
+      observeImage: true,
     });
 
     this.scroll.on("scroll", (position) => {

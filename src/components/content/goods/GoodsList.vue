@@ -1,5 +1,6 @@
 <template>
   <div class="goods">
+    <p class="recommend" v-show="isRecommend">推荐商品</p>
     <goods-list-item
       v-for="(item, index) in goods"
       :key="index"
@@ -19,6 +20,17 @@ export default {
         return [];
       },
     },
+    isRecommend: {
+      type: Boolean,
+      default() {
+        return false;
+      },
+    },
+  },
+  methods: {
+    // imgItem() {
+    //   this.$;
+    // },
   },
 };
 </script>

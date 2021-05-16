@@ -1,6 +1,7 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemClick">
     <!-- @load用于监听图片是否加载完成 -->
+
     <img :src="goodsItem.show.img" alt="" @load="imgLoad" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
@@ -23,6 +24,13 @@ export default {
     imgLoad() {
       // console.log("imgLoad finish");
       this.$bus.$emit("itemImgLoad");
+    },
+    itemClick() {
+      this.$router.push("/detail/" + this.goodsItem.iid);
+    },
+    // 动态显示图片
+    showImage(item) {
+      return goodsItem.img || goodsItem.image || goodsItem.show.img;
     },
   },
 };
