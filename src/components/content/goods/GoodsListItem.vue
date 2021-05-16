@@ -1,6 +1,7 @@
 <template>
   <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="" />
+    <!-- @load用于监听图片是否加载完成 -->
+    <img :src="goodsItem.show.img" alt="" @load="imgLoad" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -16,6 +17,12 @@ export default {
       default() {
         return {};
       },
+    },
+  },
+  methods: {
+    imgLoad() {
+      // console.log("imgLoad finish");
+      this.$bus.$emit("itemImgLoad");
     },
   },
 };

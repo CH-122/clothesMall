@@ -108,18 +108,19 @@ export default {
   data() {
     return {
       scroll: null,
+      probeType: 0,
     };
   },
   mounted() {
     // 使用BScrool创建滚动
     this.scroll = new BScroll(".wrapper", {
-      probeType: 3,
+      probeType: 0,
       pullUpLoad: true,
-      // click: false,
+      click: false,
     });
 
     this.scroll.on("scroll", (position) => {
-      // console.log(position);
+      console.log(position);
     });
 
     this.scroll.on("pullingUp", () => {
@@ -131,6 +132,7 @@ export default {
   methods: {
     btnClick() {
       console.log("btnClick");
+      console.log(this.probeType);
     },
   },
 };

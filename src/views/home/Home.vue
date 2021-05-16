@@ -4,8 +4,21 @@
     <nav-bar class="home-nav">
       <div slot="center">ClothesMall</div>
     </nav-bar>
-
-    <scroll class="content">
+    <tab-control
+      :titles="['流行', '新款', '精选']"
+      class="tab-control"
+      @tabClick="tabClick"
+      ref="tabControl"
+      v-show="isTabFixed"
+    ></tab-control>
+    <scroll
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scroll="contentScroll"
+      :pull-up-load="true"
+      @pullingUp="loadMore"
+    >
       <!-- 轮播图 -->
       <home-swiper :banners="banners"></home-swiper>
       <!-- 推荐栏 -->
@@ -15,42 +28,33 @@
       <!-- 标签控制 -->
       <tab-control
         :titles="['流行', '新款', '精选']"
-        class="tab-control clearfix"
         @tabClick="tabClick"
+        ref="tabControl"
+        v-show="isShow"
       ></tab-control>
       <!-- 展示栏 -->
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
-
-    <ul>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
-    </ul>
+    <!-- 返回顶部 -->
+    <!-- <div @click="backClick"><back-top></back-top></div>    以前的做法 -->
+    <!-- 加上.native就可以监听组件啦  vue3废弃了这个属性 -->
+    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 <script>
 import NavBar from "../../components/common/navbar/NavBar.vue";
+import Scroll from "../../components/common/scroll/Scroll";
+
 import TabControl from "../../components/content/tabControl/TabControl.vue";
 import GoodsList from "../../components/content/goods/GoodsList.vue";
-import Scroll from "../../components/common/scroll/Scroll";
+import BackTop from "../../components/content/backTop/BackTop.vue";
 
 import HomeSwiper from "./childComp/HomeSwiper.vue";
 import RecommendView from "./childComp/RecommendView.vue";
 import FeatureView from "./childComp/FeatureView.vue";
 
 import { getHomeMultidata, getHomeGoods } from "@/network/home";
+import { debounce } from "../../common/utils";
 
 export default {
   name: "Home",
@@ -62,6 +66,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
+    BackTop,
   },
   created() {
     this.getHomeMultidata();
@@ -69,6 +74,24 @@ export default {
     this.getHomeGoods("pop", 1);
     this.getHomeGoods("new", 1);
     this.getHomeGoods("sell", 1);
+    // 监听item中的图片加载完成
+  },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh, 300);
+
+    // new BScroll("#home");
+    this.$bus.$on("itemImgLoad", () => {
+      // console.log("监听到了图片加载完成");
+      // this.$refs.scroll.refresh();
+      // console.log(this);
+      refresh();
+    });
+
+    // 组件属性$el，用于获取组件中的元素
+    setTimeout(() => {
+      console.log(this.$refs.tabControl.$el.offsetTop);
+      this.taboffsetTop = this.$refs.tabControl.$el.offsetTop;
+    }, 100);
   },
   data() {
     return {
@@ -89,6 +112,10 @@ export default {
         },
       },
       currentType: "pop",
+      isShowBackTop: false,
+      taboffsetTop: 0,
+      isTabFixed: false,
+      isShow: true,
     };
   },
   methods: {
@@ -107,6 +134,9 @@ export default {
         // 变量时，不能跟.变量   要[变量]
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
+
+        // 多次加载
+        this.$refs.scroll.scroll.finishPullUp();
       });
     },
 
@@ -126,14 +156,28 @@ export default {
           break;
       }
     },
+    backClick() {
+      console.log("backtop");
+      this.$refs.scroll.scrollTo(0, 0, 600);
+      // console.log(this.$refs.scroll.message);
+    },
+    contentScroll(position) {
+      this.isShowBackTop = position.y < -800;
+
+      //
+      this.isTabFixed = -position.y > this.taboffsetTop - 44;
+      this.isShow = -position.y < this.taboffsetTop - 44;
+    },
+    loadMore() {
+      // console.log("loadmore");
+      this.getHomeGoods(this.currentType);
+      this.$refs.scroll.scroll.refresh();
+    },
   },
   computed: {
     showGoods() {
       return this.goods[this.currentType].list;
     },
-  },
-  mounted() {
-    // new BScroll("#home");
   },
 };
 </script>
@@ -141,10 +185,11 @@ export default {
 <style scoped>
 .home-nav {
   /* scoped   css只会对当前组件起效果 */
-  position: fixed;
-  top: 0;
+  /* position: fixed; */
+  /* top: 0;
   left: 0;
-  right: 0;
+  right: 0; */
+  position: relative;
   z-index: 9999999;
   background-color: rgb(211, 143, 169);
   color: #eee;
@@ -158,10 +203,12 @@ export default {
 }
 
 .tab-control {
-  position: sticky;
-  top: 44px;
+  /* position: sticky; */
+  /* top: 44px; */
   /* 解决goodlist覆盖tabControl */
   z-index: 99;
+  position: relative;
+  /* top: 44px; */
 }
 
 .content {
