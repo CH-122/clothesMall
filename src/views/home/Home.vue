@@ -47,14 +47,13 @@ import Scroll from "../../components/common/scroll/Scroll";
 
 import TabControl from "../../components/content/tabControl/TabControl.vue";
 import GoodsList from "../../components/content/goods/GoodsList.vue";
-import BackTop from "../../components/content/backTop/BackTop.vue";
 
 import HomeSwiper from "./childComp/HomeSwiper.vue";
 import RecommendView from "./childComp/RecommendView.vue";
 import FeatureView from "./childComp/FeatureView.vue";
 
 import { getHomeMultidata, getHomeGoods } from "@/network/home";
-import { debounce } from "../../common/utils";
+import { itemListenerMixin, backTopMixin } from "../../common/mixin";
 
 export default {
   name: "Home",
@@ -66,7 +65,6 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
   },
   created() {
     this.getHomeMultidata();
@@ -76,17 +74,8 @@ export default {
     this.getHomeGoods("sell", 1);
     // 监听item中的图片加载完成
   },
+  mixins: [itemListenerMixin, backTopMixin],
   mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh, 300);
-
-    // new BScroll("#home");
-    this.$bus.$on("itemImgLoad", () => {
-      // console.log("监听到了图片加载完成");
-      // this.$refs.scroll.refresh();
-      // console.log(this);
-      refresh();
-    });
-
     // 组件属性$el，用于获取组件中的元素
     setTimeout(() => {
       console.log(this.$refs.tabControl2.$el.offsetTop);
@@ -112,7 +101,6 @@ export default {
         },
       },
       currentType: "pop",
-      isShowBackTop: false,
       taboffsetTop: 0,
       isTabFixed: false,
       isShow: true,
@@ -158,11 +146,7 @@ export default {
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
     },
-    backClick() {
-      console.log("backtop");
-      this.$refs.scroll.scrollTo(0, 0, 600);
-      // console.log(this.$refs.scroll.message);
-    },
+
     contentScroll(position) {
       this.isShowBackTop = position.y < -800;
 
@@ -183,6 +167,12 @@ export default {
   },
   destroyed() {
     console.log("home destoryed");
+  },
+  // 被keep-alive包裹的组件停止使用时调用
+  deactivated() {
+    // console.log(2);
+    // 取消全局事件的监听
+    this.$bus.$off("itemImgLoad", this.itemImgListener);
   },
 };
 </script>

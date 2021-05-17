@@ -40,12 +40,13 @@ export default {
   methods: {
     imgLoad() {
       if (++this.count === this.imagesLength) {
+        console.log("加载完成");
         this.$emit("imgLoad");
       }
     },
   },
   watch: {
-    imagesInfo() {
+    detailInfo() {
       this.imagesLength = this.detailInfo.detailImage[0].list.length;
     },
   },

@@ -2,7 +2,7 @@
   <div class="goods-item" @click="itemClick">
     <!-- @load用于监听图片是否加载完成 -->
 
-    <img :src="goodsItem.show.img" alt="" @load="imgLoad" />
+    <img :src="showImage" alt="" @load="imgLoad" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -22,15 +22,25 @@ export default {
   },
   methods: {
     imgLoad() {
-      // console.log("imgLoad finish");
       this.$bus.$emit("itemImgLoad");
+
+      // console.log("imgLoad finish");
+      // if (this.$router.path.indexOf("/home")) {
+      //   this.$bus.$emit("homeItemImgLoad");
+      // } else if (this.$router.path.indexOf("/detail")) {
+      //   this.$bus.$emit("detailItemImgLoad");
+      // }
     },
     itemClick() {
       this.$router.push("/detail/" + this.goodsItem.iid);
     },
+  },
+  computed: {
     // 动态显示图片
     showImage(item) {
-      return goodsItem.img || goodsItem.image || goodsItem.show.img;
+      return (
+        this.goodsItem.img || this.goodsItem.image || this.goodsItem.show.img
+      );
     },
   },
 };

@@ -15,6 +15,7 @@
       <div class="info-detail">
         <p>{{ commentInfo.content }}</p>
         <div class="info-other">
+          <!-- |showDate   过滤器 -->
           <span class="date">{{ commentInfo.created | showDate }}</span>
           <span>{{ commentInfo.style }}</span>
         </div>
@@ -39,12 +40,16 @@ export default {
   props: {
     commentInfo: {
       type: Object,
+      default() {
+        return {};
+      },
     },
   },
   filters: {
     showDate: function (value) {
+      // 时间戳单位为秒
       let date = new Date(value * 1000);
-      return formatDate(date, "yyyy-MM-dd hh:mm");
+      return formatDate(date, "yyyy-MM-dd hh:mm:ss");
     },
   },
 };

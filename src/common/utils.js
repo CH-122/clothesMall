@@ -11,12 +11,18 @@ export function debounce(func, delay) {
   }
 }
 
+
+// 不足两位用0补齐两位
 function padLeftZero(str) {
   return ("00" + str).substr(str.length);
 }
 
 // 时间格式化
 export function formatDate(date, fmt) {
+  // 获取年份
+  // y+ 表示一个或多个y
+  // y* 表示0个或多个
+  // y? 表示0个或一个
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
   }
