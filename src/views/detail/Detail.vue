@@ -29,9 +29,11 @@
         ></detail-comment-info>
         <goods-list :goods="recommendList" ref="recommend"></goods-list>
       </scroll>
-      <detail-bootom-bar @addToCart="addToCart"></detail-bootom-bar>
+
+      <detail-bootom-bar @addCart="addToCart"></detail-bootom-bar>
     </div>
     <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
+    <!-- <toast :message="message" :show="show"></toast> -->
   </div>
 </template>
 <script>
@@ -54,6 +56,7 @@ import GoodsList from "../../components/content/goods/GoodsList.vue";
 
 import { itemListenerMixin, backTopMixin } from "../../common/mixin";
 import DetailBootomBar from "./childComps/DetailBootomBar.vue";
+// import Toast from "../../components/common/toaast/Toast.vue";
 
 export default {
   name: "Detail",
@@ -68,6 +71,7 @@ export default {
     DetailCommentInfo,
     GoodsList,
     DetailBootomBar,
+    // Toast,
   },
   mixins: [itemListenerMixin, backTopMixin],
 
@@ -83,6 +87,8 @@ export default {
       recommendList: [],
       themeY: [],
       currentIndex: 0,
+      // message: "",
+      // show: false,
     };
   },
 
@@ -172,6 +178,7 @@ export default {
       //   }
       // }
       // console.log(this.themeY[4]);
+
       // hack做法   占内存
       for (let i = 0; i < length; i++) {
         if (
@@ -187,7 +194,6 @@ export default {
       this.isShowBackTop = position.y < -800;
     },
     addToCart() {
-      console.log("详情页收到了添加");
       // 获取购物车需要展示的信息
       const product = {};
       product.image = this.topImages[0];
@@ -197,6 +203,19 @@ export default {
       product.iid = this.iid;
 
       // 将商品添加到购物车
+      // this.$store.commit("addToCart", product);
+
+      this.$store.dispatch("addCart", product).then((res) => {
+        // console.log(res);
+        // this.show = true;
+        // this.message = res;
+        // setTimeout(() => {
+        //   this.show = false;
+        //   this.message = "";
+        // }, 2000);
+
+        this.$toast.show(res, 2000);
+      });
     },
   },
 

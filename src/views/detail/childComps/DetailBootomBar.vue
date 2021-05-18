@@ -26,7 +26,7 @@ export default {
   methods: {
     addToCart() {
       // console.log(1);
-      this.$emit("addToCart");
+      this.$emit("addCart");
     },
   },
 };
