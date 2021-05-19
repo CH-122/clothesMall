@@ -1,6 +1,11 @@
 <template>
   <div>
-    <div v-for="(item, index) in content" :key="index" class="item">
+    <div
+      v-for="(item, index) in content"
+      :key="index"
+      class="item"
+      @click="itemClick(item.id)"
+    >
       <img :src="item.url" alt="" />
       <span>{{ item.content }}</span>
     </div>
@@ -15,6 +20,14 @@ export default {
       default() {
         return [];
       },
+    },
+  },
+  methods: {
+    itemClick(id) {
+      if (id == "cart") {
+        // console.log(111);
+        this.$router.push("/shopcart");
+      }
     },
   },
 };

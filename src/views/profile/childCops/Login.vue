@@ -8,7 +8,7 @@
       <div class="center">
         <span>登录/注册</span>
         <div class="content">
-          <img src="../../../assets/img/profile/phone.svg" alt="" />
+          <img src="../../../assets/img/profile/phone.svg" alt="" class="img" />
           <span>暂无绑定手机号</span>
         </div>
       </div>
@@ -28,7 +28,7 @@ export default {
 .login {
   display: flex;
   height: 80px;
-  background-color: #fff;
+  background-color: rgb(183, 236, 139);
   border-bottom: 1px solid #eee;
 }
 

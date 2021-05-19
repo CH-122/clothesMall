@@ -40,11 +40,14 @@ export default {
 <style  scoped>
 .content {
   height: 300px;
-  background-color: bisque;
   overflow: hidden;
 }
 
 .profile {
   background-color: #eee;
+}
+
+.profile-navbar {
+  background-color: rgb(200, 224, 162);
 }
 </style>

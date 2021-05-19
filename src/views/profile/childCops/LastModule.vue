@@ -13,6 +13,7 @@ export default {
         {
           content: "我的购物车",
           url: require("../../../assets/img/profile/message.svg"),
+          id: "cart",
         },
         {
           content: "下载购物APP",
