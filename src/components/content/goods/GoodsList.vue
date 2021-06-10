@@ -39,4 +39,8 @@ export default {
   justify-content: space-around;
   padding: 2px;
 }
+
+.g {
+  color: antiquewhite;
+}
 </style>
