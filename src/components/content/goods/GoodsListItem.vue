@@ -23,13 +23,6 @@ export default {
   methods: {
     imgLoad() {
       this.$bus.$emit("itemImgLoad");
-
-      // console.log("imgLoad finish");
-      // if (this.$router.path.indexOf("/home")) {
-      //   this.$bus.$emit("homeItemImgLoad");
-      // } else if (this.$router.path.indexOf("/detail")) {
-      //   this.$bus.$emit("detailItemImgLoad");
-      // }
     },
     itemClick() {
       this.$router.push("/detail/" + this.goodsItem.iid);

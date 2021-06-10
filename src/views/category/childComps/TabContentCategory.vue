@@ -1,8 +1,12 @@
 <template>
   <div>
     <grid-view>
-      <div class="item">
-        <a v-for="(item, index) in subcategories.list" :key="index">
+      <div
+        class="item"
+        v-for="(item, index) in subcategories.list"
+        :key="index"
+      >
+        <a>
           <img class="item-img" :src="item.image" alt="" />
           <div class="item-text">{{ item.title }}</div>
         </a>
@@ -32,7 +36,7 @@ export default {
 
 <style scoped>
 .item {
-  width: 81px;
+  margin-top: 5px;
   text-align: center;
   font-size: 12px;
 }

@@ -9,7 +9,7 @@
           <tab-content-category
             :subcategories="showSubcategory"
           ></tab-content-category>
-          <!-- <tab-control :titles="['综合', '新品', '销量']"></tab-control> -->
+          <tab-control :titles="['综合', '新品', '销量']"></tab-control>
           <!-- <tab-content-detail></tab-content-detail> -->
         </div>
       </scroll>

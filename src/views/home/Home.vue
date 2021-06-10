@@ -154,6 +154,7 @@ export default {
       this.isTabFixed = -position.y > this.taboffsetTop - 44;
       this.isShow = -position.y < this.taboffsetTop - 44;
     },
+    // 加载更多
     loadMore() {
       // console.log("loadmore");
       this.getHomeGoods(this.currentType);

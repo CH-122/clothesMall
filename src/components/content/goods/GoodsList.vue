@@ -27,11 +27,7 @@ export default {
       },
     },
   },
-  methods: {
-    // imgItem() {
-    //   this.$;
-    // },
-  },
+  methods: {},
 };
 </script>
 <style>
